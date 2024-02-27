@@ -1,0 +1,181 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .outer{
+            background-color: rgb(132, 202, 226);
+            border: 2px solid black;
+            width: 80%;
+            margin: 0 auto;
+        }
+        #logo-container{
+        display: flex;
+        flex-direction: row;
+        }
+        #logo{
+            width: 8%;
+            height: 8%;
+            float: left;
+        }
+        #logo-text{
+            letter-spacing: -1px;
+            line-height: 1.5rem;
+            padding-top: 1%;
+            font-size: 150%;
+            font-family: "Arial Rounded MT Bold";      
+        }
+        h1{
+            text-align: center;
+        }
+        td,th{
+            border: 2px solid black;
+            height: 70px;
+            font-size: larger;
+            text-align: center;
+        }
+        table,.table{
+            table-layout: auto;
+            border-collapse: collapse;  
+            margin: 0 auto; 
+            width: 75%;        
+        }
+        .line{
+            border: 1px solid black;
+            width: 60%;
+            margin: 0 auto;
+        }
+        .dif-border{
+            border: 3px solid rgb(0, 60, 110);
+            background-color: aliceblue;
+        }
+        .signatory{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin-left: 70%;
+            line-height: -10%;
+        }
+        .sign{
+            width: 80%;
+            margin: 0 auto;
+        }
+        button{
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="outer">
+      <div class="logo-container">
+        <img  src= "{% static 'Media\logo.svg' %}" id="logo" alt="MIT">
+        <h3 id="logo-text">Mittal <br> Institute of <br> Technology</h3>
+      </div>
+        <h1>Grade Sheet</h1>
+
+        
+        <div class="table">
+        <h3>Name: {{ queryset.first.student.student_name }}</h3>
+        <h3>Roll No.: {{ queryset.first.student.student_id }}</h3>
+        <h3>Date of Generation: {{queryset.first.student.studentreportcard.first.date_of_report_card_generation}}</h3>
+
+        <table>
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+            </tr>
+                {% for marks in queryset %}
+                <tr>
+                    
+                    <td>{{marks.subject.subject_name}}</td>               
+                    <td>{{marks.marks}}</td>
+                    <td>
+                        {% if marks.marks >= 90 %}
+                          A+
+                        {% elif marks.marks >= 80 %}
+                          A
+                        {% elif marks.marks >= 70 %}
+                          B+
+                        {% elif marks.marks >= 60 %}
+                          B
+                        {% elif marks.marks >= 50 %}
+                          C+
+                        {% elif marks.marks >= 40 %}
+                          C
+                        {% else %}
+                          F
+                        {% endif %}
+                    </td>
+    
+                </tr>
+                {% endfor %}
+            
+            <tr class="dif-border"><td>
+                <h3>
+                    <b>Total</b>     
+                </h3> </td>
+                <td>
+                  <h3>
+                    <b>{{total_marks.total_marks}}</b>     
+                  </h3> </td>
+                <td>
+                    <h3>
+                      <b>
+                        {% if total_marks.total_marks >= 450 %}
+                          A+
+                        {% elif total_marks.total_marks >= 400 %}
+                          A
+                        {% elif total_marks.total_marks >= 350 %}
+                          B+
+                        {% elif total_marks.total_marks >= 300 %}
+                          B
+                        {% elif total_marks.total_marks >= 250 %}
+                          C+
+                        {% elif total_marks.total_marks >= 200 %}
+                          C
+                        {% else %}
+                          F
+                        {% endif %}
+                      </b>     
+                </h3> </td>
+            </tr>
+        </table>
+       <br>
+        <div class="line"></div>
+        <h3>Overall Performance: {% if total_marks.total_marks == 500 %}
+            Outstanding
+          {% elif total_marks.total_marks >= 450 %}
+            Excellent
+          {% elif total_marks.total_marks >= 400 %}
+            Very Good
+          {% elif total_marks.total_marks >= 350 %}
+            Good
+          {% elif total_marks.total_marks >= 300 %}
+            Very Fair
+          {% elif total_marks.total_marks >= 250 %}
+            Fair
+          {% elif total_marks.total_marks >= 200 %}
+            Average
+          {% else %}
+            Fail
+          {% endif %}</h3>
+        <h3>Rank: {{queryset.first.student.studentreportcard.first.student_rank}}</h3>
+    </div>
+
+    <div class="signatory">
+    <img class="sign" src="{% static 'Media\signature.png' %}" alt="Ayush Mittal">
+    <h3>Director, MIT</h3>
+    </div>
+
+</div>
+
+</body>
+</html>

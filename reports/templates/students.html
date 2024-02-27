@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block start %}
+
+
+  
+
+<div class="container mt-5">
+
+    <form class="mb-4">
+        <div class="row">
+            <div class="col-md-6">
+                <input class="form-control" name="search" placeholder="Search">
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-success">Search</button>
+            </div>
+        </div>
+    </form>
+
+
+<nav aria-label="...">
+    <ul class="pagination">
+        
+            {% if queryset.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ queryset.previous_page_number }}">previous</a>
+            </li>
+            <li class="page-item"><a class="page-link">{{ queryset.previous_page_number }}</a></li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link">previous</a>
+            </li>
+            <li class="page-item"><a class="page-link"></a></li>
+            {% endif %}
+    
+            <span class="current">
+                
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link">{{ queryset.number }}</a>                 
+                </li>
+                
+            </span>
+    
+            {% if queryset.has_next %}
+            <li class="page-item"><a class="page-link">{{ queryset.next_page_number }}</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ queryset.next_page_number }}">next</a>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link"></a></li>
+            <li class="page-item disabled">
+                <a class="page-link">next</a>
+            </li>
+            {% endif %}
+        
+    </ul>
+</nav> 
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Roll No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>  
+                <th scope="col">Department</th>                          
+                <th scope="col">Mail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in queryset %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td><a href="{% url 'generate_otp' student.student_id %}">{{student.student_id}}</a></td>               
+                <td>{{student.student_name}}</td>
+                <td>{{student.student_age}}</td>
+                <td>{{student.department.department}}</td>          
+                <td>{{student.student_email}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock %}
